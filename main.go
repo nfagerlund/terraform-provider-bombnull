@@ -20,7 +20,7 @@ func main() {
 	flag.Parse()
 
 	err := providerserver.Serve(context.Background(), provider.New, providerserver.ServeOpts{
-		Address:         "registry.terraform.io/hashicorp/null",
+		Address:         "app.terraform.io/nicktech/bombnull",
 		Debug:           debug,
 		ProtocolVersion: 5,
 	})

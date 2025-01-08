@@ -90,7 +90,7 @@ func (n *nullResource) Update(ctx context.Context, req resource.UpdateRequest, r
 }
 
 func (n *nullResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-
+	resp.Diagnostics.AddError("five, four, three, two", "make it boom, make it boom, make it boom, make it boom")
 }
 
 type nullModelV0 struct {

@@ -1,5 +1,7 @@
 # Terraform Provider: Null
 
+HEY, THIS VERSION OF NULL HAS BEEN HACKED SO THAT IT ALWAYS ERRORS ON RESOURCE DESTRUCTION. DON'T USE THIS.
+
 The Null provider is a rather-unusual provider that has constructs that intentionally do nothing. This may sound strange, and indeed these constructs do not need to be used in most cases, but they can be useful in various situations to help orchestrate tricky behavior or work around limitations.
 
 ## Requirements
@@ -97,7 +99,7 @@ when opening a PR with:
 # List of workflows for the 'pull_request' action
 $ act -l pull_request
 
-# Execute the workflows associated with the `pull_request' action 
+# Execute the workflows associated with the `pull_request' action
 $ act pull_request
 ```
 
