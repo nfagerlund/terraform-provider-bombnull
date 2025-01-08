@@ -55,6 +55,11 @@ func (n *nullResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
+
+			"u_tried_it": schema.BoolAttribute{
+				Description: "Gets set to true the first time you try to destroy the resource. Subsequent attempts will succeed.",
+				Computed:    true,
+			},
 		},
 	}
 }
@@ -90,10 +95,18 @@ func (n *nullResource) Update(ctx context.Context, req resource.UpdateRequest, r
 }
 
 func (n *nullResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	resp.Diagnostics.AddError("five, four, three, two", "make it boom, make it boom, make it boom, make it boom")
+	var tried bool
+	diags := req.State.GetAttribute(ctx, path.Root("u_tried_it"), &tried)
+	resp.Diagnostics.Append(diags...)
+	if !tried {
+		diags = req.State.SetAttribute(ctx, path.Root("u_tried_it"), true)
+		resp.Diagnostics.Append(diags...)
+		resp.Diagnostics.AddError("five, four, three, two", "make it boom, make it boom, make it boom, make it boom")
+	}
 }
 
 type nullModelV0 struct {
 	Triggers types.Map    `tfsdk:"triggers"`
 	ID       types.String `tfsdk:"id"`
+	UTriedIt types.Bool   `tfsdk:"u_tried_it"`
 }
