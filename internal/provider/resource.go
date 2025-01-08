@@ -76,6 +76,8 @@ func (n *nullResource) Create(ctx context.Context, req resource.CreateRequest, r
 
 	diags := resp.State.SetAttribute(ctx, path.Root("id"), fmt.Sprintf("%d", rand.Int()))
 	resp.Diagnostics.Append(diags...)
+	diags = resp.State.SetAttribute(ctx, path.Root("u_tried_it"), false)
+	resp.Diagnostics.Append(diags...)
 }
 
 func (n *nullResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
