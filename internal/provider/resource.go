@@ -101,7 +101,7 @@ func (n *nullResource) Delete(ctx context.Context, req resource.DeleteRequest, r
 	diags := req.State.GetAttribute(ctx, path.Root("u_tried_it"), &tried)
 	resp.Diagnostics.Append(diags...)
 	if !tried {
-		diags = req.State.SetAttribute(ctx, path.Root("u_tried_it"), true)
+		diags = resp.State.SetAttribute(ctx, path.Root("u_tried_it"), true)
 		resp.Diagnostics.Append(diags...)
 		resp.Diagnostics.AddError("five, four, three, two", "make it boom, make it boom, make it boom, make it boom")
 	}
