@@ -15,7 +15,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 
-	"github.com/terraform-providers/terraform-provider-null/internal/planmodifiers"
+	"github.com/nfagerlund/terraform-provider-bombnull/internal/planmodifiers"
 )
 
 var (

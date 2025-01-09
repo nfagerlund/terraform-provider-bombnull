@@ -10,7 +10,7 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-framework/providerserver"
 
-	"github.com/terraform-providers/terraform-provider-null/internal/provider"
+	"github.com/nfagerlund/terraform-provider-bombnull/internal/provider"
 )
 
 func main() {

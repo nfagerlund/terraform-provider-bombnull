@@ -20,7 +20,7 @@ func New() provider.Provider {
 type nullProvider struct{}
 
 func (p *nullProvider) Metadata(ctx context.Context, req provider.MetadataRequest, resp *provider.MetadataResponse) {
-	resp.TypeName = "null"
+	resp.TypeName = "bombnull"
 }
 
 func (p *nullProvider) Configure(ctx context.Context, req provider.ConfigureRequest, resp *provider.ConfigureResponse) {

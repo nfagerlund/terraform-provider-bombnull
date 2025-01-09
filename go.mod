@@ -1,4 +1,4 @@
-module github.com/terraform-providers/terraform-provider-null
+module github.com/nfagerlund/terraform-provider-bombnull
 
 go 1.22.7
 
