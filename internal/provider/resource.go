@@ -48,6 +48,12 @@ func (n *bombNullResource) Schema(ctx context.Context, req resource.SchemaReques
 				},
 			},
 
+			"nontriggers": schema.MapAttribute{
+				Description: "A map of arbitrary strings that, when changed, will cause a normal Update of the resource without requiring replacement.",
+				ElementType: types.StringType,
+				Optional:    true,
+			},
+
 			"id": schema.StringAttribute{
 				Description: "This is set to a random value at create time.",
 				Computed:    true,
@@ -59,30 +65,31 @@ func (n *bombNullResource) Schema(ctx context.Context, req resource.SchemaReques
 			"bomb_create": schema.BoolAttribute{
 				Description: "Whether to error during create",
 				Optional:    true,
+				Computed:    true,
 				Default:     booldefault.StaticBool(false),
 			},
 
 			"bomb_update": schema.BoolAttribute{
 				Description: "Whether to error during update",
 				Optional:    true,
+				Computed:    true,
 				Default:     booldefault.StaticBool(false),
 			},
 
 			"bomb_delete": schema.BoolAttribute{
 				Description: "Whether to error during delete",
 				Optional:    true,
+				Computed:    true,
 				Default:     booldefault.StaticBool(false),
 			},
 
 			"bomb_every_time": schema.BoolAttribute{
-				Description: "Whether to error every time one of the bombed operations is attempted. If false, subsequent operations will succeed.",
-			},
-
-			"tried_create": schema.BoolAttribute{
-				Description: "Gets set to true the first time you try to create the resource. Subsequent attempts will succeed.",
+				Description: "Whether to error every time one of the bombed operations is attempted. If false, subsequent operations will succeed. Doesn't apply to bomb_create, which always bombs no matter what.",
+				Optional:    true,
 				Computed:    true,
 				Default:     booldefault.StaticBool(false),
 			},
+
 			"tried_update": schema.BoolAttribute{
 				Description: "Gets set to true the first time you try to update the resource. Subsequent attempts will succeed.",
 				Computed:    true,
@@ -107,18 +114,13 @@ func (n *bombNullResource) Create(ctx context.Context, req resource.CreateReques
 		return
 	}
 
+	// create doesn't get to read state, so it always bombs.
 	bomb := model.BombCreate.ValueBool()
-	always := model.BombEveryTime.ValueBool()
-	tried := model.TriedCreate.ValueBool()
-	attr := path.Root("tried_create")
 
-	if bomb && (always || !tried) {
-		diags := resp.State.SetAttribute(ctx, attr, true)
-		resp.Diagnostics.Append(diags...)
+	if bomb {
 		resp.Diagnostics.AddError("five, four, three, two", "make it boom, make it boom, make it boom, make it boom")
-	} else {
-		resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 	}
+	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 
 	diags := resp.State.SetAttribute(ctx, path.Root("id"), fmt.Sprintf("%d", rand.Int()))
 	resp.Diagnostics.Append(diags...)
@@ -129,8 +131,10 @@ func (n *bombNullResource) Read(ctx context.Context, req resource.ReadRequest, r
 
 func (n *bombNullResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 	var model nullModelV0
+	var statemodel nullModelV0
 
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &model)...)
+	resp.Diagnostics.Append(req.State.Get(ctx, &statemodel)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -138,7 +142,7 @@ func (n *bombNullResource) Update(ctx context.Context, req resource.UpdateReques
 
 	bomb := model.BombUpdate.ValueBool()
 	always := model.BombEveryTime.ValueBool()
-	tried := model.TriedUpdate.ValueBool()
+	tried := statemodel.TriedUpdate.ValueBool()
 	attr := path.Root("tried_update")
 
 	if bomb && (always || !tried) {
@@ -174,12 +178,12 @@ func (n *bombNullResource) Delete(ctx context.Context, req resource.DeleteReques
 
 type nullModelV0 struct {
 	Triggers      types.Map    `tfsdk:"triggers"`
+	NonTriggers   types.Map    `tfsdk:"nontriggers"`
 	ID            types.String `tfsdk:"id"`
 	BombEveryTime types.Bool   `tfsdk:"bomb_every_time"`
 	BombCreate    types.Bool   `tfsdk:"bomb_create"`
 	BombUpdate    types.Bool   `tfsdk:"bomb_update"`
 	BombDelete    types.Bool   `tfsdk:"bomb_delete"`
-	TriedCreate   types.Bool   `tfsdk:"tried_create"`
 	TriedUpdate   types.Bool   `tfsdk:"tried_update"`
 	TriedDelete   types.Bool   `tfsdk:"tried_delete"`
 }
