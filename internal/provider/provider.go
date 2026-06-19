@@ -35,7 +35,7 @@ func (p *nullProvider) DataSources(ctx context.Context) []func() datasource.Data
 
 func (p *nullProvider) Resources(ctx context.Context) []func() resource.Resource {
 	return []func() resource.Resource{
-		NewNullResource,
+		NewBombNullResource,
 	}
 }
 
