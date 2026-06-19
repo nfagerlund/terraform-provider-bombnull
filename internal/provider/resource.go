@@ -35,9 +35,8 @@ func (n *bombNullResource) Metadata(ctx context.Context, req resource.MetadataRe
 
 func (n *bombNullResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "The `bombnull_resource` resource implements the standard resource lifecycle but takes no further action. " +
-			"...Unless you count the action of EXPLODING and erroring the run when the conditions in its config are met!\n\n" +
-			"The `triggers` argument allows specifying an arbitrary set of values that, when changed, will cause the resource to be replaced.",
+		Description: "The `bombnull_resource` resource implements the standard resource lifecycle, and also raises errors (failing your Terraform run) at configurable points in that lifecycle.\n\n" +
+			"The `triggers` argument allows specifying an arbitrary set of values that, when changed, will cause the resource to be replaced. The `notriggers` argument is similar but only causes in-place updates.",
 		Attributes: map[string]schema.Attribute{
 			"triggers": schema.MapAttribute{
 				Description: "A map of arbitrary strings that, when changed, will force the null resource to be replaced, re-running any associated provisioners.",

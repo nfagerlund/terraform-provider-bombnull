@@ -1,8 +1,8 @@
-# Terraform Provider: Null
+# Terraform Provider: Bombnull
 
-HEY, THIS VERSION OF NULL HAS BEEN HACKED SO THAT IT ALWAYS ERRORS ON RESOURCE DESTRUCTION. DON'T USE THIS.
+This is a hacked-up version of the classic `null` provider which can reliably raise errors during apply and fail your runs.
 
-The Null provider is a rather-unusual provider that has constructs that intentionally do nothing. This may sound strange, and indeed these constructs do not need to be used in most cases, but they can be useful in various situations to help orchestrate tricky behavior or work around limitations.
+Do not use this. :]
 
 ## Requirements
 
@@ -28,13 +28,9 @@ We also provide:
 Compatibility table between this provider, the [Terraform Plugin Protocol](https://www.terraform.io/plugin/how-terraform-works#terraform-plugin-protocol)
 version it implements, and Terraform:
 
-| Null Provider | Terraform Plugin Protocol | Terraform |
+| Bombnull Provider | Terraform Plugin Protocol | Terraform |
 |:-------------:|:-------------------------:|:---------:|
-|  `>= 3.0.x`   |            `5`            | `>= 0.12` |
-|  `>= 2.1.x`   |        `4` and `5`        | `>= 0.12` |
-|  `>= 2.x.x`   |            `4`            | `<= 0.12` |
-|  `>= 1.x.x`   |            `4`            | `<= 0.12` |
-|  `>= 0.1.x`   |            `4`            | `<= 0.12` |
+|  `>= 4.2.x`   |            `5`            | `>= 0.12` |
 
 Details can be found querying the [Registry API](https://www.terraform.io/internals/provider-registry-protocol#list-available-versions)
 that return all the details about which version are currently available for a particular provider.
